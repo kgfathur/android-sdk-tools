@@ -1,0 +1,23 @@
+variables:
+  TAG_COMMIT: $CI_PROJECT_NAME:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
+  TAG_JOB: $CI_PROJECT_NAME:$CI_COMMIT_REF_NAME-$CI_PIPELINE_IID
+  IMG_VERSION: 1.0.0-$CI_PIPELINE_IID
+  AUTORUN: "FALSE"
+  ANDROID_SDK_TOOLS_URL: https://registry/repository/raw-artifacts/packages/commandlinetools-linux-8092744_latest.zip
+
+stages:
+- build
+- run
+
+build:
+  stage: build
+  # variables:
+  #   VARIABLE_A: $VARIABLE1
+  #   VARIABLE_B: $VARIABLE2
+  script:
+    - env
+    - cat Dockerfile
+    - echo $IMG_VERSION
+    - envsubst < src/build-env-template > src/build-env
+    - cat src/build-env
+    - docker build -t android-sdk:$IMG_VERSION -t android-sdk:latest .
